@@ -8,9 +8,11 @@
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
 		"ghcr.io/audacioustux/devcontainers/k9s:1": {}
 	},
-    "mounts": [
+	// Mount SSH keys from the host
+	"mounts": [
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
         "source=${env:USERPROFILE}\\.kube,target=/home/vscode/.kube,type=bind"
-    ],
+	],
     "runArgs": ["--network=host"]
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
