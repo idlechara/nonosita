@@ -58,12 +58,34 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: stat-xsl
+              mountPath: /usr/local/nginx/html/stat.xsl
+              subPath: stat.xsl
+            - name: static-content
+              mountPath: /usr/local/nginx/html/static
+          {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      {{- with .Values.volumes }}
       volumes:
+        - name: nginx-config
+          configMap:
+            name: {{ include "mikan.fullname" . }}-nginx-config
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: stat-xsl
+          configMap:
+            name: {{ include "mikan.fullname" . }}-nginx-config
+            items:
+              - key: stat.xsl
+                path: stat.xsl
+        - name: static-content
+          emptyDir: {}
+      {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.nodeSelector }}
